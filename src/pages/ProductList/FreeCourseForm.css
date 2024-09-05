@@ -1,0 +1,29 @@
+.freeCourseList {
+    padding: 20px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.freeCourseListPaper {
+    padding: 20px;
+}
+
+.freeCourseListTitle {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.freeCourseListContent {
+    margin-top: 20px;
+}
+
+.freeCourseTableAction {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.freeCourseListIcon.edit {
+    cursor: pointer;
+    color: #3085d6;
+}

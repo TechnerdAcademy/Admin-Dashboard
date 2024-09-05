@@ -1,0 +1,41 @@
+.transactionList {
+    padding: 20px;
+}
+
+.transactionListPaper {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.transactionListTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.transactionListTitle {
+    font-weight: bold;
+}
+
+.transactionListCreateBtn {
+    margin-left: auto;
+}
+
+.transactionTableAction {
+    display: flex;
+    gap: 10px;
+}
+
+.transactionListIcon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.transactionListIcon.edit {
+    color: #4caf50;
+}
+
+.transactionListIcon.delete {
+    color: #f44336;
+}

@@ -1,0 +1,41 @@
+.teacherList {
+    padding: 20px;
+}
+
+.teacherListPaper {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.teacherListTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.teacherListTitle {
+    font-weight: bold;
+}
+
+.teacherListCreateBtn {
+    margin-left: auto;
+}
+
+.teacherTableAction {
+    display: flex;
+    gap: 10px;
+}
+
+.teacherListIcon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.teacherListIcon.edit {
+    color: #4caf50;
+}
+
+.teacherListIcon.delete {
+    color: #f44336;
+}

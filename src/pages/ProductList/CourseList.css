@@ -1,0 +1,60 @@
+.courseList {
+    padding: 20px;
+}
+
+.courseListPaper {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.courseListTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.courseListTitle {
+    font-weight: bold;
+}
+
+.courseListCreateBtn {
+    margin-left: auto;
+}
+
+.courseTableAction {
+    display: flex;
+    gap: 10px;
+}
+
+.courseListIcon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.courseListIcon.edit {
+    color: #4caf50;
+}
+
+.courseListIcon.delete {
+    color: #f44336;
+}
+.courseTableActions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icons and button */
+}
+
+.freeCourseButton {
+    background-color: #4caf50; /* Green color for the button */
+    color: white;
+    padding: 6px 12px; /* Adjust padding */
+    text-transform: none; /* Prevent uppercase text */
+    font-size: 0.875rem; /* Font size */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.freeCourseButton:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
