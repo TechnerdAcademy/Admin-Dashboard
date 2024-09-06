@@ -29,7 +29,7 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "pm2 start ecosystem.config.json",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
