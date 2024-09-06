@@ -38,7 +38,7 @@ main_axios.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const resp = await reshToken();ref
+      const resp = await refreshToken();();
       const access_token =resp.access.token
       const refresh_token =resp.refresh.token
       localStorage.setItem("token", access_token);
