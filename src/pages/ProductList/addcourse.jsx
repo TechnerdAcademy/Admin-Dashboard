@@ -9,7 +9,11 @@ import {
   TextField,
   Grid,
   InputAdornment,
+  IconButton,
+  FormHelperText,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import * as Yup from "yup";
 import ThumbnailButton from "../../utilities/thubnailbutton";
 import AddButton from "../../utilities/AddButton ";
@@ -41,7 +45,7 @@ const AddCourses = () => {
           "Authorization": `Bearer ${token}`,
         },
       });
-      console.log(data.data.Location)
+      console.log(data.data.Location);
       return data.data.Location;
     } catch (error) {
       console.error("Error uploading thumbnail:", error);
@@ -68,18 +72,7 @@ const AddCourses = () => {
       imageUrl: "",
       totalDurationType: "",
     },
-    validationSchema: Yup.object({
-      title: Yup.string().required("Title is required"),
-      description: Yup.string().required("Description is required"),
-      objective: Yup.array().of(Yup.string().required("Objective is required")),
-      whatYouLearn: Yup.array().of(Yup.string().required("What You Will Learn is required")),
-      projects: Yup.array().of(Yup.string().required("Projects is required")),
-      price: Yup.number().required("Price is required").positive("Price must be a positive number"),
-      tutorName: Yup.string().required("Tutor Name is required"),
-      totalDuration: Yup.string().required("Total Duration is required"),
-      category: Yup.string().required("Category is required"),
-      startDate: Yup.date().required("Start Date is required"),
-    }),
+
     onSubmit: async (values) => {
       try {
         let imageUrl = "";
@@ -135,6 +128,21 @@ const AddCourses = () => {
     setThumbnail(null);
   };
 
+  const addProjectField = () => {
+    formik.setFieldValue("projects", [...formik.values.projects, ""]);
+  };
+
+  const handleProjectChange = (index, value) => {
+    const newProjects = [...formik.values.projects];
+    newProjects[index] = value;
+    formik.setFieldValue("projects", newProjects);
+  };
+
+  const removeProjectField = (index) => {
+    const newProjects = formik.values.projects.filter((_, i) => i !== index);
+    formik.setFieldValue("projects", newProjects);
+  };
+
   return (
     <>
       <Header
@@ -158,7 +166,7 @@ const AddCourses = () => {
                 />
               )}
             </Grid>
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <TextField
                 name="title"
                 label="Course Title"
@@ -171,10 +179,10 @@ const AddCourses = () => {
                 size="small"
               />
               {formik.errors.title && formik.touched.title && (
-                <p>{formik.errors.title}</p>
+                <FormHelperText error>{formik.errors.title}</FormHelperText>
               )}
             </Grid>
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <TextField
                 name="price"
                 label="Price"
@@ -193,7 +201,7 @@ const AddCourses = () => {
                 }}
               />
               {formik.errors.price && formik.touched.price && (
-                <p>{formik.errors.price}</p>
+                <FormHelperText error>{formik.errors.price}</FormHelperText>
               )}
             </Grid>
 
@@ -216,11 +224,11 @@ const AddCourses = () => {
                 }}
               />
               {formik.errors.discountedPrice && formik.touched.discountedPrice && (
-                <p>{formik.errors.discountedPrice}</p>
+                <FormHelperText error>{formik.errors.discountedPrice}</FormHelperText>
               )}
             </Grid>
 
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <FormControl variant="outlined" fullWidth margin="normal" color="secondary">
                 <InputLabel>Category</InputLabel>
                 <Select
@@ -233,13 +241,13 @@ const AddCourses = () => {
                   <MenuItem value="Programming">Programming</MenuItem>
                   <MenuItem value="Design">Design</MenuItem>
                 </Select>
+                {formik.errors.category && formik.touched.category && (
+                  <FormHelperText error>{formik.errors.category}</FormHelperText>
+                )}
               </FormControl>
-              {formik.errors.category && formik.touched.category && (
-                <p>{formik.errors.category}</p>
-              )}
             </Grid>
 
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <TextField
                 name="tutorName"
                 label="Tutor Name"
@@ -252,10 +260,10 @@ const AddCourses = () => {
                 size="small"
               />
               {formik.errors.tutorName && formik.touched.tutorName && (
-                <p>{formik.errors.tutorName}</p>
+                <FormHelperText error>{formik.errors.tutorName}</FormHelperText>
               )}
             </Grid>
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <TextField
                 name="totalDuration"
                 label="Total Duration"
@@ -268,11 +276,10 @@ const AddCourses = () => {
                 size="small"
               />
               {formik.errors.totalDuration && formik.touched.totalDuration && (
-                <p>{formik.errors.totalDuration}</p>
+                <FormHelperText error>{formik.errors.totalDuration}</FormHelperText>
               )}
             </Grid>
-
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <TextField
                 name="startDate"
                 label="Start Date"
@@ -281,36 +288,38 @@ const AddCourses = () => {
                 fullWidth
                 color="secondary"
                 margin="normal"
-                InputLabelProps={{ shrink: true }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 value={formik.values.startDate}
                 onChange={formik.handleChange}
                 size="small"
               />
               {formik.errors.startDate && formik.touched.startDate && (
-                <p>{formik.errors.startDate}</p>
+                <FormHelperText error>{formik.errors.startDate}</FormHelperText>
               )}
             </Grid>
 
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <TextField
                 name="description"
-                label="Course Description"
+                label="Description"
                 variant="outlined"
                 fullWidth
                 color="secondary"
                 margin="normal"
                 multiline
-                rows={2}
+                rows={4}
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 size="small"
               />
               {formik.errors.description && formik.touched.description && (
-                <p>{formik.errors.description}</p>
+                <FormHelperText error>{formik.errors.description}</FormHelperText>
               )}
             </Grid>
 
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <TextField
                 name="objective"
                 label="Objective"
@@ -318,18 +327,18 @@ const AddCourses = () => {
                 fullWidth
                 color="secondary"
                 margin="normal"
+                multiline
+                rows={4}
                 value={formik.values.objective}
                 onChange={formik.handleChange}
                 size="small"
-                multiline
-                rows={2}
               />
               {formik.errors.objective && formik.touched.objective && (
-                <p>{formik.errors.objective}</p>
+                <FormHelperText error>{formik.errors.objective}</FormHelperText>
               )}
             </Grid>
 
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <TextField
                 name="whatYouLearn"
                 label="What You Will Learn"
@@ -337,49 +346,55 @@ const AddCourses = () => {
                 fullWidth
                 color="secondary"
                 margin="normal"
+                multiline
+                rows={4}
                 value={formik.values.whatYouLearn}
                 onChange={formik.handleChange}
                 size="small"
-                multiline
-                rows={2}
               />
               {formik.errors.whatYouLearn && formik.touched.whatYouLearn && (
-                <p>{formik.errors.whatYouLearn}</p>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="projects"
-                label="Projects"
-                variant="outlined"
-                fullWidth
-                color="secondary"
-                margin="normal"
-                value={formik.values.projects[0]}
-                onChange={(e) => {
-                  formik.setFieldValue("projects", [e.target.value]);
-                }}
-                size="small"
-                multiline
-                rows={2}
-              />
-              {formik.errors.projects && formik.touched.projects && (
-                <p>{formik.errors.projects}</p>
+                <FormHelperText error>{formik.errors.whatYouLearn}</FormHelperText>
               )}
             </Grid>
 
+            <Grid item xs={12}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Projects</InputLabel>
+                {formik.values.projects.map((project, index) => (
+                  <div key={index} style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                      name={`projects[${index}]`}
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      value={project}
+                      onChange={(e) => handleProjectChange(index, e.target.value)}
+                      size="small"
+                    />
+                    <IconButton onClick={() => removeProjectField(index)}>
+                      <RemoveIcon />
+                    </IconButton>
+                  </div>
+                ))}
+                <IconButton onClick={addProjectField}>
+                  <AddIcon />
+                </IconButton>
+                {formik.errors.projects && formik.touched.projects && (
+                  <FormHelperText error>{formik.errors.projects}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
           </Grid>
 
-          <br />
-          <Grid container justifyContent="flex-start" spacing={2}>
+          <Grid container spacing={2} marginTop={2}>
             <Grid item>
               <AddButton onClick={formik.handleSubmit} />
             </Grid>
             <Grid item>
-              <CancelButton onClick={handleReset} />
+              <ResetButton onClick={handleReset} />
             </Grid>
             <Grid item>
-              <ResetButton onClick={handleReset} />
+              <CancelButton />
             </Grid>
           </Grid>
         </form>
