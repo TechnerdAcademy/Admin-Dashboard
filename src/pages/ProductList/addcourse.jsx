@@ -1,4 +1,4 @@
-import React, { useRef, useState  , useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import {
   FormControl,
@@ -18,7 +18,7 @@ import ResetButton from "../../utilities/ResetButton";
 import Header from '../../utilities/Header';
 import main_axios from "../../utilities/mainaxios";
 import axios from "axios";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
 const AddCourses = () => {
   const formRef = useRef(null);
@@ -35,13 +35,13 @@ const AddCourses = () => {
     formData.append("file", imageFile);
 
     try {
-        const { data } = await axios.post("https://tecknerdacademy.in/api/v1/upload", formData, {
+      const { data } = await axios.post("https://tecknerdacademy.in/api/v1/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${token}`, 
+          "Authorization": `Bearer ${token}`,
         },
       });
-      console.log(data.data.Location) 
+      console.log(data.data.Location)
       return data.data.Location;
     } catch (error) {
       console.error("Error uploading thumbnail:", error);
@@ -53,8 +53,9 @@ const AddCourses = () => {
     initialValues: {
       title: "",
       description: "",
-      objective: "",
-      whatYouLearn: "",
+      objective: [""],
+      whatYouLearn: [""],
+      projects: [""],
       price: "",
       discountedPrice: "",
       isFree: false,
@@ -65,13 +66,14 @@ const AddCourses = () => {
       playlistLink: "",
       startDate: "",
       imageUrl: "",
-      totalDurationType:"",
+      totalDurationType: "",
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Title is required"),
       description: Yup.string().required("Description is required"),
-      objective: Yup.string().required("Objective is required"),
-      whatYouLearn: Yup.string().required("What You Will Learn is required"),
+      objective: Yup.array().of(Yup.string().required("Objective is required")),
+      whatYouLearn: Yup.array().of(Yup.string().required("What You Will Learn is required")),
+      projects: Yup.array().of(Yup.string().required("Projects is required")),
       price: Yup.number().required("Price is required").positive("Price must be a positive number"),
       tutorName: Yup.string().required("Tutor Name is required"),
       totalDuration: Yup.string().required("Total Duration is required"),
@@ -79,34 +81,35 @@ const AddCourses = () => {
       startDate: Yup.date().required("Start Date is required"),
     }),
     onSubmit: async (values) => {
-        try {
-          let imageUrl = "";
-          if (thumbnail) {
-            imageUrl = await uploadThumbnail(thumbnail);
-          }
-      
-          const courseData = {
-            title: values.title,
-            description: values.description,
-            objective: values.objective,
-            whatYouLearn: values.whatYouLearn,
-            price: parseFloat(values.price),
-            discountedPrice: values.discountedPrice ? parseFloat(values.discountedPrice) : null,
-            isFree: values.isFree,
-            tutorName: values.tutorName,
-            totalDuration: values.totalDuration,
-            category: values.category,
-            liveClassLink: values.liveClassLink || "",
-            playlistLink: values.playlistLink || "",
-            startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
-            imageUrl, 
-            totalDurationType: values.totalDurationType,
-          };
-      
-          console.log("Course Data:", courseData); // Debugging line to check the data
-      
-          const response = await main_axios.post("/courses", courseData);
-          console.log("Course added successfully:", response.data);
+      try {
+        let imageUrl = "";
+        if (thumbnail) {
+          imageUrl = await uploadThumbnail(thumbnail);
+        }
+
+        const courseData = {
+          title: values.title,
+          description: values.description,
+          objective: values.objective,
+          projects: values.projects,
+          whatYouLearn: values.whatYouLearn,
+          price: parseFloat(values.price),
+          discountedPrice: values.discountedPrice ? parseFloat(values.discountedPrice) : null,
+          isFree: values.isFree,
+          tutorName: values.tutorName,
+          totalDuration: values.totalDuration,
+          category: values.category,
+          liveClassLink: values.liveClassLink || "",
+          playlistLink: values.playlistLink || "",
+          startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
+          imageUrl,
+          totalDurationType: values.totalDurationType,
+        };
+
+        console.log("Course Data:", courseData); // Debugging line to check the data
+
+        const response = await main_axios.post("/courses", courseData);
+        console.log("Course added successfully:", response.data);
 
         // Success alert
         Swal.fire({
@@ -131,7 +134,7 @@ const AddCourses = () => {
     formik.resetForm();
     setThumbnail(null);
   };
-  
+
   return (
     <>
       <Header
@@ -342,6 +345,26 @@ const AddCourses = () => {
               />
               {formik.errors.whatYouLearn && formik.touched.whatYouLearn && (
                 <p>{formik.errors.whatYouLearn}</p>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="projects"
+                label="Projects"
+                variant="outlined"
+                fullWidth
+                color="secondary"
+                margin="normal"
+                value={formik.values.projects[0]}
+                onChange={(e) => {
+                  formik.setFieldValue("projects", [e.target.value]);
+                }}
+                size="small"
+                multiline
+                rows={2}
+              />
+              {formik.errors.projects && formik.touched.projects && (
+                <p>{formik.errors.projects}</p>
               )}
             </Grid>
 
