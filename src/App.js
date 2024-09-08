@@ -18,6 +18,7 @@ import TeachersAdd from './pages/TeachersList/add'
 import TeachersEdit from './pages/TeachersList/edit'
 import Freecourse from './pages/ProductList/Freecourse'
 import FreecourseEdit from './pages/ProductList/FreecourseEdit'
+import CourseContent from './pages/ProductList/coursecontent'
 // import Settings from './pages/Login/index'
 
 
@@ -71,6 +72,10 @@ function App() {
         {
           path: '/course',
           element: <ProductList />,
+        },
+        {
+          path: '/course/content/:id?',
+          element: <CourseContent/>,
         },
         {
           path: '/free-courses',

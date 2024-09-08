@@ -117,9 +117,18 @@ export default function Auth() {
           justifyContent: 'center',
         }}
       >
-        <Box sx={{ marginBottom: 2 }}>
-          <img src="https://via.placeholder.com/80" alt="Logo" />
-        </Box>
+      <Box sx={{ marginBottom: 2 }}>
+  <img
+    src={`${process.env.PUBLIC_URL}/tecknerdslogo.png`}
+    alt="Technerds Logo"
+    style={{
+      width: 200, // adjust the width to your desired size
+      height: 120, // adjust the height to your desired size
+      objectFit: 'cover', // crop the image to fit the container
+      objectPosition: 'center', // focus on the center of the image
+    }}
+  />
+</Box>
 
         {isLogin ? (
           // Login Form

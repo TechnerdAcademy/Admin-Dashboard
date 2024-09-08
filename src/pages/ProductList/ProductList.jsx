@@ -65,16 +65,20 @@ export default function CourseList() {
         navigate(`/course/free/${id}`);
     };
 
+    const handleCourseContent = (id) => {
+        navigate(`/course/content/${id}`);
+    };
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Course', width: 250 },
-        { field: 'instructor', headerName: 'Instructor', width: 150 },
+        { field: 'instructor', headerName: 'Instructor', width: 120 },
         { field: 'duration', headerName: 'Duration', width: 120 },
         { field: 'price', headerName: 'Price', width: 120 },
         { 
             field: 'actions', 
             headerName: 'Actions', 
-            width: 300, 
+            width: 400, // Adjusted width to accommodate the new button
             renderCell: (params) => (
                 <div className="courseTableActions">
                     <Link to={`/course/edit/${params.row.id}`} style={{ marginRight: 8 }}>
@@ -90,9 +94,18 @@ export default function CourseList() {
                         color="secondary" 
                         className="courseListIcon freeCourse"
                         onClick={() => handleFreeCourse(params.row.id)}
-                        style={{ padding: '6px 12px' }} // Adjust padding
+                        style={{ padding: '6px 12px', marginRight: 8 }} // Adjust padding
                     >
                         Free Course
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        className="courseListIcon courseContent"
+                        onClick={() => handleCourseContent(params.row.id)}
+                        style={{ padding: '6px 12px' }} // Adjust padding
+                    >
+                        Course Content
                     </Button>
                 </div>
             )

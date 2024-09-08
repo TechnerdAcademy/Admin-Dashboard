@@ -32,7 +32,7 @@ const FreeCourseForm = () => {
     formData.append("file", imageFile);
 
     try {
-      const { data } = await axios.post("http://localhost:4001/v1/upload", formData, {
+      const { data } = await axios.post("https://tecknerdacademy.in/api/v1/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${token}`,
