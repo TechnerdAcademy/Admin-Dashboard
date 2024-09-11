@@ -58,7 +58,7 @@ const EditCourse = () => {
         startDate: course.startDate ? new Date(course.startDate).toISOString().split("T")[0] : "",
         imageUrl: course.imageUrl || "",
         totalDurationType: course.totalDurationType || "",
-        openForEnrol: course.openForEnrol || "",
+        openforenrol: course.openForEnrol || "",
       });
 
       if (course.imageUrl) {
@@ -142,7 +142,7 @@ const EditCourse = () => {
           startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
           imageUrl,
           totalDurationType: values.totalDurationType,
-          openForEnrol: values.openForEnrol,
+          openforenrol: values.openForEnrol,
         };
 
         await main_axios.put(`/courses/${courseId}`, courseData);
