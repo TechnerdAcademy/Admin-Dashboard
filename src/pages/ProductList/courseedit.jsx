@@ -9,60 +9,70 @@ import {
   TextField,
   Grid,
   InputAdornment,
+  IconButton,
+  FormHelperText,
+  FormControlLabel, // Add this import
+  Checkbox, // Add this import
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import * as Yup from "yup";
 import ThumbnailButton from "../../utilities/thubnailbutton";
-import UpdateButton from "../../utilities/UpdateButton";
+import AddButton from "../../utilities/AddButton ";
 import CancelButton from "../../utilities/CancelButton";
 import ResetButton from "../../utilities/ResetButton";
-import Header from "../../utilities/Header";
+import Header from '../../utilities/Header';
 import main_axios from "../../utilities/mainaxios";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useParams, useNavigate } from "react-router-dom";
 
-
-const EditCourses = () => {
+const EditCourse = () => {
   const formRef = useRef(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [token, setToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
   const { courseId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
-
-    const fetchCourseData = async () => {
-      try {
-        const response = await main_axios.get(`/courses/${courseId}`);
-        const courseData = response.data;
-        formik.setValues({
-          title: courseData.title || "",
-          description: courseData.description || "",
-          objective: courseData.objective || "",
-          whatYouLearn: courseData.whatYouLearn || "",
-          price: courseData.price || "",
-          discountedPrice: courseData.discountedPrice || "",
-          isFree: courseData.isFree || false,
-          tutorName: courseData.tutorName || "",
-          totalDuration: courseData.totalDuration || "",
-          category: courseData.category || "",
-          liveClassLink: courseData.liveClassLink || "",
-          playlistLink: courseData.playlistLink || "",
-          startDate: courseData.startDate ? new Date(courseData.startDate).toISOString().slice(0, 10) : "",
-          imageUrl: courseData.imageUrl || "",
-          totalDurationType: courseData.totalDurationType || "",
-        });
-        setThumbnail(courseData.imageUrl); // Set the existing image as thumbnail
-      } catch (error) {
-        console.error("Error fetching course data:", error);
-      }
-    };
-
-    fetchCourseData();
+    fetchCourseDetails();
   }, [courseId]);
-  
+
+  const fetchCourseDetails = async () => {
+    try {
+      const response = await main_axios.get(`/courses/${courseId}`);
+      const course = response.data;
+      formik.setValues({
+        title: course.title || "",
+        description: course.description || "",
+        price: course.price || "",
+        discountedPrice: course.discountedPrice || "",
+        isFree: course.isFree || false,
+        tutorName: course.tutorName || "",
+        totalDuration: course.totalDuration || "",
+        category: course.category || "",
+        liveClassLink: course.liveClassLink || "",
+        playlistLink: course.playlistLink || "",
+        startDate: course.startDate ? new Date(course.startDate).toISOString().split("T")[0] : "",
+        imageUrl: course.imageUrl || "",
+        totalDurationType: course.totalDurationType || "",
+        openForEnrol: course.openForEnrol || "",
+      });
+
+      if (course.imageUrl) {
+        setThumbnail({ preview: course.imageUrl });
+      }
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch course details. Please try again.",
+      });
+    }
+  };
 
   const uploadThumbnail = async (imageFile) => {
     const formData = new FormData();
@@ -72,7 +82,7 @@ const EditCourses = () => {
       const { data } = await axios.post("https://tecknerdacademy.in/api/v1/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
       });
       return data.data.Location;
@@ -86,8 +96,6 @@ const EditCourses = () => {
     initialValues: {
       title: "",
       description: "",
-      objective: "",
-      whatYouLearn: "",
       price: "",
       discountedPrice: "",
       isFree: false,
@@ -99,34 +107,30 @@ const EditCourses = () => {
       startDate: "",
       imageUrl: "",
       totalDurationType: "",
+      openForEnrol: false,
     },
+
     validationSchema: Yup.object({
-      title: Yup.string().required("Title is required"),
+      title: Yup.string().required("Course title is required"),
       description: Yup.string().required("Description is required"),
-      objective: Yup.string().required("Objective is required"),
-      whatYouLearn: Yup.string().required("What You Will Learn is required"),
       price: Yup.number().required("Price is required").positive("Price must be a positive number"),
-      tutorName: Yup.string().required("Tutor Name is required"),
-      totalDuration: Yup.string().required("Total Duration is required"),
+      discountedPrice: Yup.number().nullable().positive("Discounted price must be a positive number"),
+      tutorName: Yup.string().required("Tutor name is required"),
+      totalDuration: Yup.string().required("Total duration is required"),
       category: Yup.string().required("Category is required"),
-      startDate: Yup.date().required("Start Date is required"),
+      startDate: Yup.date().required("Start date is required").nullable(),
     }),
+
     onSubmit: async (values) => {
-      console.log('Form submitted:', values); // <--- Add this line
-      setIsLoading(true); // Start loading
       try {
-        let imageUrl = "";
-        if (thumbnail && typeof thumbnail === 'object') {
-          imageUrl = await uploadThumbnail(thumbnail);
-        } else {
-          imageUrl = values.imageUrl; // Use existing image URL
+        let imageUrl = values.imageUrl;
+        if (thumbnail && thumbnail.file) {
+          imageUrl = await uploadThumbnail(thumbnail.file);
         }
-  
+
         const courseData = {
           title: values.title,
           description: values.description,
-          objective: values.objective,
-          whatYouLearn: values.whatYouLearn,
           price: parseFloat(values.price),
           discountedPrice: values.discountedPrice ? parseFloat(values.discountedPrice) : null,
           isFree: values.isFree,
@@ -138,26 +142,25 @@ const EditCourses = () => {
           startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
           imageUrl,
           totalDurationType: values.totalDurationType,
+          openForEnrol: values.openForEnrol,
         };
-  
-        const response = await main_axios.put(`/courses/${courseId}`, courseData);
-        console.log('Course updated successfully:', response); // <--- Add this line
+
+        await main_axios.put(`/courses/${courseId}`, courseData);
+
         Swal.fire({
-          title: "Success!",
-          text: "Course updated successfully.",
           icon: "success",
-          confirmButtonText: "OK",
+          title: "Success",
+          text: "Course updated successfully!",
         });
+        navigate("/course"); // Redirect to course list page or desired page
       } catch (error) {
-        console.error('Error updating course:', error); // <--- Add this line
+        console.error("Error updating course:", error);
+
         Swal.fire({
-          title: "Error!",
-          text: "There was an issue updating the course. Please try again.",
           icon: "error",
-          confirmButtonText: "OK",
+          title: "Error",
+          text: "Failed to update course. Please try again.",
         });
-      } finally {
-        setIsLoading(false); // End loading
       }
     },
   });
@@ -172,7 +175,7 @@ const EditCourses = () => {
       <Header
         title="Edit Course"
         breadcrumbItems={[
-          // { title: "Courses List", url: "/courses" },
+          { title: "Courses List", url: "/courses" },
           { title: "Edit Course", url: "" },
         ]}
         titleMarginRight="270px"
@@ -181,17 +184,17 @@ const EditCourses = () => {
         <form onSubmit={formik.handleSubmit} ref={formRef}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <ThumbnailButton onChange={setThumbnail} />
-              {thumbnail && (
+              <ThumbnailButton
+                onChange={(file) => setThumbnail({ file })}
+              />
+              {thumbnail && thumbnail.preview && (
                 <img
-                  src={typeof thumbnail === 'object' ? URL.createObjectURL(thumbnail) : thumbnail}
+                  src={thumbnail.preview}
                   width={"70px"}
                   alt="thumbnail"
                 />
               )}
             </Grid>
-
-            {/* Course Title */}
             <Grid item xs={4}>
               <TextField
                 name="title"
@@ -205,11 +208,9 @@ const EditCourses = () => {
                 size="small"
               />
               {formik.errors.title && formik.touched.title && (
-                <p>{formik.errors.title}</p>
+                <FormHelperText error>{formik.errors.title}</FormHelperText>
               )}
             </Grid>
-
-            {/* Price */}
             <Grid item xs={4}>
               <TextField
                 name="price"
@@ -229,11 +230,10 @@ const EditCourses = () => {
                 }}
               />
               {formik.errors.price && formik.touched.price && (
-                <p>{formik.errors.price}</p>
+                <FormHelperText error>{formik.errors.price}</FormHelperText>
               )}
             </Grid>
 
-            {/* Discounted Price */}
             <Grid item xs={4}>
               <TextField
                 name="discountedPrice"
@@ -253,11 +253,10 @@ const EditCourses = () => {
                 }}
               />
               {formik.errors.discountedPrice && formik.touched.discountedPrice && (
-                <p>{formik.errors.discountedPrice}</p>
+                <FormHelperText error>{formik.errors.discountedPrice}</FormHelperText>
               )}
             </Grid>
 
-            {/* Category */}
             <Grid item xs={4}>
               <FormControl variant="outlined" fullWidth margin="normal" color="secondary">
                 <InputLabel>Category</InputLabel>
@@ -271,13 +270,12 @@ const EditCourses = () => {
                   <MenuItem value="Programming">Programming</MenuItem>
                   <MenuItem value="Design">Design</MenuItem>
                 </Select>
+                {formik.errors.category && formik.touched.category && (
+                  <FormHelperText error>{formik.errors.category}</FormHelperText>
+                )}
               </FormControl>
-              {formik.errors.category && formik.touched.category && (
-                <p>{formik.errors.category}</p>
-              )}
             </Grid>
 
-            {/* Tutor Name */}
             <Grid item xs={4}>
               <TextField
                 name="tutorName"
@@ -291,11 +289,10 @@ const EditCourses = () => {
                 size="small"
               />
               {formik.errors.tutorName && formik.touched.tutorName && (
-                <p>{formik.errors.tutorName}</p>
+                <FormHelperText error>{formik.errors.tutorName}</FormHelperText>
               )}
             </Grid>
 
-            {/* Total Duration */}
             <Grid item xs={4}>
               <TextField
                 name="totalDuration"
@@ -309,17 +306,35 @@ const EditCourses = () => {
                 size="small"
               />
               {formik.errors.totalDuration && formik.touched.totalDuration && (
-                <p>{formik.errors.totalDuration}</p>
+                <FormHelperText error>{formik.errors.totalDuration}</FormHelperText>
               )}
             </Grid>
 
-            {/* Start Date */}
+            <Grid item xs={4}>
+              <FormControl variant="outlined" fullWidth margin="normal" color="secondary">
+                <InputLabel>Total Duration Type</InputLabel>
+                <Select
+                  name="totalDurationType"
+                  label="Total Duration Type"
+                  value={formik.values.totalDurationType}
+                  onChange={formik.handleChange}
+                  size="small"
+                >
+                  <MenuItem value="Hours">Hours</MenuItem>
+                  <MenuItem value="Days">Days</MenuItem>
+                </Select>
+                {formik.errors.totalDurationType && formik.touched.totalDurationType && (
+                  <FormHelperText error>{formik.errors.totalDurationType}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+
             <Grid item xs={4}>
               <TextField
                 name="startDate"
                 label="Start Date"
-                type="date"
                 variant="outlined"
+                type="date"
                 fullWidth
                 color="secondary"
                 margin="normal"
@@ -329,119 +344,53 @@ const EditCourses = () => {
                 size="small"
               />
               {formik.errors.startDate && formik.touched.startDate && (
-                <p>{formik.errors.startDate}</p>
+                <FormHelperText error>{formik.errors.startDate}</FormHelperText>
               )}
             </Grid>
-
-            {/* Playlist Link */}
             <Grid item xs={4}>
-              <TextField
-                name="playlistLink"
-                label="Playlist Link"
-                variant="outlined"
-                fullWidth
-                color="secondary"
-                margin="normal"
-                value={formik.values.playlistLink}
-                onChange={formik.handleChange}
-                size="small"
-              />
-              {formik.errors.playlistLink && formik.touched.playlistLink && (
-                <p>{formik.errors.playlistLink}</p>
+              <FormControl variant="outlined" fullWidth margin="normal" color="secondary">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="openForEnrol"
+                      checked={formik.values.openForEnrol}
+                      onChange={formik.handleChange}
+                      size="small"
+                    />
+                  }
+                  label="Open for Enrol"
+                />
+              </FormControl>
+              {formik.errors.openForEnrol && formik.touched.openForEnrol && (
+                <FormHelperText error>{formik.errors.openForEnrol}</FormHelperText>
               )}
             </Grid>
 
-            {/* Live Class Link */}
-            <Grid item xs={4}>
-              <TextField
-                name="liveClassLink"
-                label="Live Class Link"
-                variant="outlined"
-                fullWidth
-                color="secondary"
-                margin="normal"
-                value={formik.values.liveClassLink}
-                onChange={formik.handleChange}
-                size="small"
-              />
-              {formik.errors.liveClassLink && formik.touched.liveClassLink && (
-                <p>{formik.errors.liveClassLink}</p>
-              )}
-            </Grid>
 
-            {/* Description */}
             <Grid item xs={12}>
               <TextField
                 name="description"
-                label="Course Description"
+                label="Description"
                 variant="outlined"
                 fullWidth
                 color="secondary"
                 margin="normal"
                 multiline
-                rows={2}
+                rows={4}
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 size="small"
               />
               {formik.errors.description && formik.touched.description && (
-                <p>{formik.errors.description}</p>
+                <FormHelperText error>{formik.errors.description}</FormHelperText>
               )}
             </Grid>
 
-            {/* Objective */}
-            <Grid item xs={12}>
-              <TextField
-                name="objective"
-                label="Objective"
-                variant="outlined"
-                fullWidth
-                color="secondary"
-                margin="normal"
-                value={formik.values.objective}
-                onChange={formik.handleChange}
-                size="small"
-                multiline
-                rows={2}
-              />
-              {formik.errors.objective && formik.touched.objective && (
-                <p>{formik.errors.objective}</p>
-              )}
-            </Grid>
-
-            {/* What You Will Learn */}
-            <Grid item xs={12}>
-              <TextField
-                name="whatYouLearn"
-                label="What You Will Learn"
-                variant="outlined"
-                fullWidth
-                color="secondary"
-                margin="normal"
-                value={formik.values.whatYouLearn}
-                onChange={formik.handleChange}
-                size="small"
-                multiline
-                rows={2}
-              />
-              {formik.errors.whatYouLearn && formik.touched.whatYouLearn && (
-                <p>{formik.errors.whatYouLearn}</p>
-              )}
-            </Grid>
-
-          </Grid>
-
-          <br />
-          <Grid container justifyContent="flex-start" spacing={2}>
-            <Grid item>
-              <UpdateButton onClick={formik.handleSubmit} />
-            </Grid>
-            <Grid item>
-              <CancelButton onClick={handleReset} />
-            </Grid>
-            <Grid item>
-              <ResetButton onClick={handleReset} />
-            </Grid>
+            <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-start", gap: "10px" }}>
+  <CancelButton />
+  <ResetButton onClick={handleReset} />
+  <AddButton onClick={formik.handleSubmit} />
+</Grid>
           </Grid>
         </form>
       </Paper>
@@ -449,4 +398,4 @@ const EditCourses = () => {
   );
 };
 
-export default EditCourses;
+export default EditCourse;

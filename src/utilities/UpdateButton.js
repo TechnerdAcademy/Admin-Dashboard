@@ -37,7 +37,7 @@ import { Avatar, ButtonBase, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { useTheme } from "@mui/material/styles";
 
-const AddButton = ({ onClick }) => {
+const UpdateButton  = ({ onClick }) => {
   const theme = useTheme();
 
   return (
@@ -66,11 +66,11 @@ const AddButton = ({ onClick }) => {
       </ButtonBase>
       {/* Adjusted Typography to be aligned to the bottom */}
       <Typography variant="body1" sx={{ color: theme.palette.success.dark }}>
-        Add
+        Edit
       </Typography>
     </div>
   );
 };
 
-export default AddButton;
+export default UpdateButton ;
 

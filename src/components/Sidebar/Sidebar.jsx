@@ -81,6 +81,18 @@ export default function Sidebar() {
                                 <span className="listItemText">Free-Courses</span>
                             </li>
                         </Link>
+                        <Link className="sidebarListLink" to="/business">
+                            <li className="sidebarListItem">
+                                <Storefront className="listItemIcon" />
+                                <span className="listItemText">BusinessPackage</span>
+                            </li>
+                        </Link>
+                        <Link className="sidebarListLink" to="/announcements">
+                            <li className="sidebarListItem">
+                                <Storefront className="listItemIcon" />
+                                <span className="listItemText">Announcements</span>
+                            </li>
+                        </Link>
                         <Link className="sidebarListLink" to="/transactions">
                             <li className="sidebarListItem">
                                 <AttachMoneyOutlined className="listItemIcon" />

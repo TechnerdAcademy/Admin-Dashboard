@@ -10,6 +10,7 @@ import {
   Paper
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import Swal from 'sweetalert2';
 import main_axios from '../../utilities/mainaxios';
 
 const CourseContentForm = () => {
@@ -46,11 +47,34 @@ const CourseContentForm = () => {
 
     try {
       const response = await main_axios.post('/coursecontent/', courseContent);
-      console.log('Course content posted successfully:', response.data);
-      // Handle success, maybe clear form or show a success message
+      // Show success alert using SweetAlert
+      Swal.fire({
+        title: 'Success!',
+        text: 'Course content posted successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6'
+      });
+      // Clear form or show a success message
+      setWeekNumber('');
+      setCourseId('');
+      setDays([
+        { day: 'Monday', topics: [{ title: '', description: '' }] },
+        { day: 'Tuesday', topics: [{ title: '', description: '' }] },
+        { day: 'Wednesday', topics: [{ title: '', description: '' }] },
+        { day: 'Thursday', topics: [{ title: '', description: '' }] },
+        { day: 'Friday', topics: [{ title: '', description: '' }] }
+      ]);
     } catch (error) {
       console.error('Error posting course content:', error);
-      // Handle error, maybe show an error message
+      // Show error alert using SweetAlert
+      Swal.fire({
+        title: 'Error!',
+        text: 'An error occurred while posting the course content.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 

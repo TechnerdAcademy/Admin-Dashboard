@@ -19,6 +19,9 @@ import TeachersEdit from './pages/TeachersList/edit'
 import Freecourse from './pages/ProductList/Freecourse'
 import FreecourseEdit from './pages/ProductList/FreecourseEdit'
 import CourseContent from './pages/ProductList/coursecontent'
+import BusinessPackage from './pages/BusinessPackage/index'
+import Announcements from './pages/Announcements/add'
+import Certificates from './pages/ProductList/certificates'
 // import Settings from './pages/Login/index'
 
 
@@ -96,6 +99,18 @@ function App() {
         {
           path: '/transactions',
           element: <TransactionList />,
+        },
+        {
+          path: '/course/certificates/:id?',
+          element: <Certificates />,
+        },
+        {
+          path: '/business',
+          element: <BusinessPackage  />,
+        },
+        {
+          path: '/announcements',
+          element: <Announcements  />,
         },
         // {
         //   path: '/settings',

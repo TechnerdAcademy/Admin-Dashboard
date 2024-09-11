@@ -11,6 +11,8 @@ import {
   InputAdornment,
   IconButton,
   FormHelperText,
+  FormControlLabel, // Add this import
+  Checkbox, // Add this import
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -71,6 +73,7 @@ const AddCourses = () => {
       startDate: "",
       imageUrl: "",
       totalDurationType: "",
+      openForEnrol: false,
     },
 
     onSubmit: async (values) => {
@@ -97,10 +100,11 @@ const AddCourses = () => {
           startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
           imageUrl,
           totalDurationType: values.totalDurationType,
+          openForEnrol: values.openForEnrol, 
         };
 
         console.log("Course Data:", courseData); // Debugging line to check the data
-
+        console.log("Form values:", values);
         const response = await main_axios.post("/courses", courseData);
         console.log("Course added successfully:", response.data);
 
@@ -131,11 +135,11 @@ const AddCourses = () => {
   const addProjectField = () => {
     formik.setFieldValue("projects", [...formik.values.projects, ""]);
   };
-  const addwhatYouLearn = () =>{
+  const addwhatYouLearn = () => {
     formik.setFieldValue("whatYouLearn", [...formik.values.whatYouLearn, ""]);
   }
-  const addobjective = () =>{
-   formik.setFieldValue("objective", [...formik.values.objective, ""]);
+  const addobjective = () => {
+    formik.setFieldValue("objective", [...formik.values.objective, ""]);
   }
 
   const handleProjectChange = (index, value) => {
@@ -143,30 +147,30 @@ const AddCourses = () => {
     newProjects[index] = value;
     formik.setFieldValue("projects", newProjects);
   };
-const handleWhatYouLearnChange = (index, value) => {
-  const newwhatYouLearn = [...formik.values.whatYouLearn];
-   newwhatYouLearn[index] = value;
-   formik.setFieldValue("whatYouLearn", newwhatYouLearn);
+  const handleWhatYouLearnChange = (index, value) => {
+    const newwhatYouLearn = [...formik.values.whatYouLearn];
+    newwhatYouLearn[index] = value;
+    formik.setFieldValue("whatYouLearn", newwhatYouLearn);
 
-}
+  }
 
-const handleobjectiveChange = (index, value) => {
-  const newObjective = [...formik.values.objective];
-  newObjective[index] = value;
-  formik.setFieldValue("objective", newObjective);
-}
+  const handleobjectiveChange = (index, value) => {
+    const newObjective = [...formik.values.objective];
+    newObjective[index] = value;
+    formik.setFieldValue("objective", newObjective);
+  }
   const removeProjectField = (index) => {
     const newProjects = formik.values.projects.filter((_, i) => i !== index);
     formik.setFieldValue("projects", newProjects);
   };
 
   const removeWhatYouLearnField = (index) => {
-    const newwhatYouLearn = formik.values.whatYouLearn.filter((_, i) => i!== index);
+    const newwhatYouLearn = formik.values.whatYouLearn.filter((_, i) => i !== index);
     formik.setFieldValue("whatYouLearn", newwhatYouLearn);
   };
 
   const removeObjectiveField = (index) => {
-    const newObjective = formik.values.objective.filter((_, i) => i!== index);
+    const newObjective = formik.values.objective.filter((_, i) => i !== index);
     formik.setFieldValue("objective", newObjective);
   };
 
@@ -326,6 +330,28 @@ const handleobjectiveChange = (index, value) => {
                 <FormHelperText error>{formik.errors.startDate}</FormHelperText>
               )}
             </Grid>
+            <Grid item xs={4}>
+            <FormControl variant="outlined" fullWidth margin="normal" color="secondary">
+  <FormControlLabel
+    control={
+      <Checkbox
+        name="openForEnrol"
+        checked={formik.values.openForEnrol}
+        onChange={(e) => {
+          console.log("Checkbox changed:", e.target.checked);
+          formik.setFieldValue("openForEnrol", e.target.checked);
+          formik.setFieldTouched("openForEnrol", true); // Add this line
+        }}
+        size="small"
+      />
+    }
+    label="Open for Enrol"
+  />
+</FormControl>
+              {formik.errors.openForEnrol && formik.touched.openForEnrol && (
+                <FormHelperText error>{formik.errors.openForEnrol}</FormHelperText>
+              )}
+            </Grid>
 
             <Grid item xs={12}>
               <TextField
@@ -345,7 +371,7 @@ const handleobjectiveChange = (index, value) => {
                 <FormHelperText error>{formik.errors.description}</FormHelperText>
               )}
             </Grid>
-   
+
             <Grid item xs={12}>
               <FormControl fullWidth margin="normal">
                 {formik.values.objective.map((objective, index) => (
@@ -364,17 +390,17 @@ const handleobjectiveChange = (index, value) => {
                       <RemoveIcon />
                     </IconButton>
                     <IconButton onClick={addobjective}>
-                  <AddIcon />
-                </IconButton>
+                      <AddIcon />
+                    </IconButton>
                   </div>
                 ))}
-        
+
                 {formik.errors.objective && formik.touched.objective && (
                   <FormHelperText error>{formik.errors.objective}</FormHelperText>
                 )}
               </FormControl>
             </Grid>
-          
+
             <Grid item xs={12}>
               <FormControl fullWidth margin="normal">
                 {formik.values.whatYouLearn.map((whatYouLearn, index) => (
@@ -393,11 +419,11 @@ const handleobjectiveChange = (index, value) => {
                       <RemoveIcon />
                     </IconButton>
                     <IconButton onClick={addwhatYouLearn}>
-                  <AddIcon />
-                </IconButton>
+                      <AddIcon />
+                    </IconButton>
                   </div>
                 ))}
-        
+
                 {formik.errors.whatYouLearn && formik.touched.whatYouLearn && (
                   <FormHelperText error>{formik.errors.whatYouLearn}</FormHelperText>
                 )}
@@ -422,11 +448,11 @@ const handleobjectiveChange = (index, value) => {
                       <RemoveIcon />
                     </IconButton>
                     <IconButton onClick={addProjectField}>
-                   <AddIcon />
-                 </IconButton>
+                      <AddIcon />
+                    </IconButton>
                   </div>
                 ))}
-            
+
                 {formik.errors.projects && formik.touched.projects && (
                   <FormHelperText error>{formik.errors.projects}</FormHelperText>
                 )}
