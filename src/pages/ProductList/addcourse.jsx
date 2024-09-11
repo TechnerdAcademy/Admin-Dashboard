@@ -100,7 +100,7 @@ const AddCourses = () => {
           startDate: values.startDate ? new Date(values.startDate).toISOString() : "",
           imageUrl,
           totalDurationType: values.totalDurationType,
-          openForEnrol: values.openForEnrol, 
+          openforenrol: values.openForEnrol, 
         };
 
         console.log("Course Data:", courseData); // Debugging line to check the data
