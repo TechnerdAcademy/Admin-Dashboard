@@ -3,7 +3,7 @@ import { DeleteOutline, EditNote } from "@mui/icons-material";
 import { DataGrid } from '@mui/x-data-grid';
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Paper, Button, Typography } from "@mui/material";
+import { Paper, Button, Typography, Grid } from "@mui/material";
 import main_axios from "../../utilities/mainaxios";
 import "./CourseList.css";
 
@@ -69,6 +69,10 @@ export default function CourseList() {
         navigate(`/course/content/${id}`);
     };
 
+    const handleCertificates = (id) => {
+        navigate(`/course/certificates/${id}`);
+    };
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Course', width: 250 },
@@ -78,36 +82,54 @@ export default function CourseList() {
         { 
             field: 'actions', 
             headerName: 'Actions', 
-            width: 400, // Adjusted width to accommodate the new button
+            width: 500, // Adjusted width to accommodate the new button
             renderCell: (params) => (
-                <div className="courseTableActions">
-                    <Link to={`/course/edit/${params.row.id}`} style={{ marginRight: 8 }}>
-                        <EditNote className="courseListIcon edit" />
-                    </Link>
-                    <DeleteOutline 
-                        className="courseListIcon delete" 
-                        onClick={() => handleCourseDelete(params.row.id)} 
-                        style={{ marginRight: 8 }}
-                    />
-                    <Button 
-                        variant="contained" 
-                        color="secondary" 
-                        className="courseListIcon freeCourse"
-                        onClick={() => handleFreeCourse(params.row.id)}
-                        style={{ padding: '6px 12px', marginRight: 8 }} // Adjust padding
-                    >
-                        Free Course
-                    </Button>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        className="courseListIcon courseContent"
-                        onClick={() => handleCourseContent(params.row.id)}
-                        style={{ padding: '6px 12px' }} // Adjust padding
-                    >
-                        Course Content
-                    </Button>
-                </div>
+                <Grid container spacing={1} className="courseTableActions">
+                    <Grid item>
+                        <Link to={`/course/edit/${params.row.id}`}>
+                            <EditNote className="courseListIcon edit" />
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <DeleteOutline 
+                            className="courseListIcon delete" 
+                            onClick={() => handleCourseDelete(params.row.id)} 
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button 
+                            variant="contained" 
+                            color="secondary" 
+                            className="courseListIcon freeCourse"
+                            onClick={() => handleFreeCourse(params.row.id)}
+                            size="small"
+                        >
+                            Free Course
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className="courseListIcon courseContent"
+                            onClick={() => handleCourseContent(params.row.id)}
+                            size="small"
+                        >
+                            Content
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button 
+                            variant="contained" 
+                            color="success" 
+                            className="courseListIcon certificates"
+                            onClick={() => handleCertificates(params.row.id)}
+                            size="small"
+                        >
+                            Certificates
+                        </Button>
+                    </Grid>
+                </Grid>
             )
         },
     ];
