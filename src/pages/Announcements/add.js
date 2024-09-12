@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import main_axios from '../../utilities/mainaxios';
 
 const AddAnnouncementPage = () => {
   // Form validation using Formik and Yup
@@ -22,7 +23,7 @@ const AddAnnouncementPage = () => {
         };
 
         // Make the POST request to the API
-        const response = await axios.post('https://tecknerdacademy.in/api/v1/announcement/', announcementData);
+        const response = await main_axios.post('/announcement/', announcementData);
 
         if (response.status === 201) {
           // Show success alert using SweetAlert
