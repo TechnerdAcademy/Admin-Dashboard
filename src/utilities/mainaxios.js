@@ -4,7 +4,7 @@ import { refreshToken } from "./refreshtoken";
 
 
 const main_axios = Axios.create({
-  baseURL:  "https://tecknerdacademy.in/api/v1/",
+  baseURL:  "https://technerdacademy.in/api/v1/",
 });
 
 
