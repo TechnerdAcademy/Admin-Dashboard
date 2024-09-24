@@ -43,14 +43,14 @@ export default function Sidebar() {
                                 <span className="listItemText">Home</span>
                             </li>
                         </Link>
-                        <li className="sidebarListItem">
+                        {/* <li className="sidebarListItem">
                             <Timeline className="listItemIcon" />
                             <span className="listItemText">Analytics</span>
                         </li>
                         <li className="sidebarListItem">
                             <TrendingUp className="listItemIcon" />
                             <span className="listItemText">Sales</span>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
 

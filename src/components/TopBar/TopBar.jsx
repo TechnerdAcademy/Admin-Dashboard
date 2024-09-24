@@ -59,10 +59,10 @@ export default function TopBar() {
           <h2 className="logo">Technerds Dashboard</h2>
         </div>
         <div className="topbarRight">
-          <div className="topbarRightIconWrapper">
+          {/* <div className="topbarRightIconWrapper">
             <NotificationsNone sx={{ color: "var(--sidebar-text-color)" }} />
             <span className="iconBadge">2</span>
-          </div>
+          </div> */}
           <div className="topbarRightIconWrapper" onClick={handleOpen}>
             <Settings sx={{ color: "var(--sidebar-text-color)" }} />
           </div>
