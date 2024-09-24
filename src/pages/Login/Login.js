@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link } from '@mui/material';
+import { TextField, Button, Typography, Container, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
 import { toast } from 'react-toastify'; // Import toast for notifications
@@ -9,7 +9,7 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState(''); // Name state for signup
   const [mobile, setMobile] = useState(''); // Mobile state for signup
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(''); // For API error messages
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState(''); // State for email error message
   const [isLogin, setIsLogin] = useState(true); // State to toggle between Login and Signup
@@ -26,7 +26,7 @@ export default function Auth() {
     e.preventDefault();
     try {
       setLoading(true);
-      setError(false);
+      setError(''); // Clear any previous errors
 
       if (!validateEmail(email)) {
         setEmailError('Invalid email format');
@@ -53,8 +53,9 @@ export default function Auth() {
       navigate('/');
     } catch (error) {
       console.error('Login error', error);
-      toast.error('Login failed. Please check your credentials.');
-      setError(true);
+      const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -64,7 +65,7 @@ export default function Auth() {
     e.preventDefault();
     try {
       setLoading(true);
-      setError(false);
+      setError(''); // Clear any previous errors
 
       if (!validateEmail(email)) {
         setEmailError('Invalid email format');
@@ -86,8 +87,9 @@ export default function Auth() {
       navigate('/'); // Navigate to the homepage after successful signup
     } catch (error) {
       console.error('Signup error', error);
-      toast.error('Signup failed. Please try again.');
-      setError(true);
+      const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -117,18 +119,18 @@ export default function Auth() {
           justifyContent: 'center',
         }}
       >
-      <Box sx={{ marginBottom: 2 }}>
-  <img
-    src={`${process.env.PUBLIC_URL}/tecknerdslogo.png`}
-    alt="Technerds Logo"
-    style={{
-      width: 200, // adjust the width to your desired size
-      height: 120, // adjust the height to your desired size
-      objectFit: 'cover', // crop the image to fit the container
-      objectPosition: 'center', // focus on the center of the image
-    }}
-  />
-</Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <img
+            src={`${process.env.PUBLIC_URL}/tecknerdslogo.png`}
+            alt="Technerds Logo"
+            style={{
+              width: 200, // adjust the width to your desired size
+              height: 120, // adjust the height to your desired size
+              objectFit: 'cover', // crop the image to fit the container
+              objectPosition: 'center', // focus on the center of the image
+            }}
+          />
+        </Box>
 
         {isLogin ? (
           // Login Form
@@ -163,7 +165,7 @@ export default function Auth() {
               />
               {error && (
                 <Typography variant="body2" sx={{ color: 'red', marginBottom: 2 }}>
-                  Invalid email or password
+                  {error}
                 </Typography>
               )}
               <Button
@@ -239,6 +241,11 @@ export default function Auth() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              {error && (
+                <Typography variant="body2" sx={{ color: 'red', marginBottom: 2 }}>
+                  {error}
+                </Typography>
+              )}
               <Button
                 type="submit"
                 fullWidth
