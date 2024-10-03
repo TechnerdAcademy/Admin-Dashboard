@@ -9,8 +9,16 @@ export default function BusinessPackageList() {
     useEffect(() => {
         const fetchBusinessPackages = async () => {
             try {
-                const response = await main_axios.get('courses//');
-               console.log(response)
+                const response = await main_axios.get('/buisness/');
+                // Map the response data to match the DataGrid row structure
+                const formattedData = response.data.map((item) => ({
+                    id: item._id, // DataGrid requires an 'id' field
+                    name: item.fullname,
+                    email: item.contactemail,
+                    phone: item.mobileNumber,
+                    projectDescription: item.description,
+                }));
+                setBusinessPackages(formattedData); // Update state with formatted data
             } catch (error) {
                 console.error("Error fetching business packages:", error);
             }

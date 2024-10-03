@@ -119,6 +119,8 @@ const EditCourse = () => {
       totalDuration: Yup.string().required("Total duration is required"),
       category: Yup.string().required("Category is required"),
       startDate: Yup.date().required("Start date is required").nullable(),
+      liveClassLink: Yup.string().nullable(),
+      playlistLink: Yup.string().nullable(),
     }),
 
     onSubmit: async (values) => {
@@ -365,6 +367,39 @@ const EditCourse = () => {
                 <FormHelperText error>{formik.errors.openForEnrol}</FormHelperText>
               )}
             </Grid>
+            <Grid item xs={4}>
+  <TextField
+    name="liveClassLink"
+    label="Live Class Link"
+    variant="outlined"
+    fullWidth
+    color="secondary"
+    margin="normal"
+    value={formik.values.liveClassLink}
+    onChange={formik.handleChange}
+    size="small"
+  />
+  {formik.errors.liveClassLink && formik.touched.liveClassLink && (
+    <FormHelperText error>{formik.errors.liveClassLink}</FormHelperText>
+  )}
+</Grid>
+
+<Grid item xs={4}>
+  <TextField
+    name="playlistLink"
+    label="Playlist Link"
+    variant="outlined"
+    fullWidth
+    color="secondary"
+    margin="normal"
+    value={formik.values.playlistLink}
+    onChange={formik.handleChange}
+    size="small"
+  />
+  {formik.errors.playlistLink && formik.touched.playlistLink && (
+    <FormHelperText error>{formik.errors.playlistLink}</FormHelperText>
+  )}
+</Grid>
 
 
             <Grid item xs={12}>

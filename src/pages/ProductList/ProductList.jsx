@@ -73,91 +73,107 @@ export default function CourseList() {
         navigate(`/course/certificates/${id}`);
     };
 
+    // New handler for coupons
+    const handleCoupons = (id) => {
+        navigate(`/course/coupons/${id}`);
+    };
+
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        { field: 'name', headerName: 'Course', width: 250 },
-        { field: 'instructor', headerName: 'Instructor', width: 120 },
-        { field: 'duration', headerName: 'Duration', width: 120 },
-        { field: 'price', headerName: 'Price', width: 120 },
+        // { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'name', headerName: 'Course', width: 220 },
+        { field: 'instructor', headerName: 'Instructor', width: 100 },
+        { field: 'duration', headerName: 'Duration', width: 90},
+        { field: 'price', headerName: 'Price', width: 90 },
         { 
-            field: 'actions', 
-            headerName: 'Actions', 
-            width: 500, // Adjusted width to accommodate the new button
-            renderCell: (params) => (
-                <Grid container spacing={1} className="courseTableActions">
-                    <Grid item>
-                        <Link to={`/course/edit/${params.row.id}`}>
-                            <EditNote className="courseListIcon edit" />
-                        </Link>
-                    </Grid>
-                    <Grid item>
-                        <DeleteOutline 
-                            className="courseListIcon delete" 
-                            onClick={() => handleCourseDelete(params.row.id)} 
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Button 
-                            variant="contained" 
-                            color="secondary" 
-                            className="courseListIcon freeCourse"
-                            onClick={() => handleFreeCourse(params.row.id)}
-                            size="small"
-                        >
-                            Free Course
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button 
-                            variant="contained" 
-                            color="primary" 
-                            className="courseListIcon courseContent"
-                            onClick={() => handleCourseContent(params.row.id)}
-                            size="small"
-                        >
-                            Content
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button 
-                            variant="contained" 
-                            color="success" 
-                            className="courseListIcon certificates"
-                            onClick={() => handleCertificates(params.row.id)}
-                            size="small"
-                        >
-                            Certificates
-                        </Button>
-                    </Grid>
-                </Grid>
+          field: 'actions', 
+          headerName: 'Actions', 
+          width: 600, // Reduced width to fit all buttons
+          renderCell: (params) => (
+            <Grid container spacing={1} className="courseTableActions">
+              <Grid item>
+                <Link to={`/course/edit/${params.row.id}`}>
+                  <EditNote className="courseListIcon edit" />
+                </Link>
+              </Grid>
+              <Grid item>
+                <DeleteOutline 
+                  className="courseListIcon delete" 
+                  onClick={() => handleCourseDelete(params.row.id)} 
+                />
+              </Grid>
+              <Grid item>
+                <Button 
+                  variant="contained" 
+                  color="secondary" 
+                  className="courseListIcon freeCourse"
+                  onClick={() => handleFreeCourse(params.row.id)}
+                  size="small"
+                >
+                  Free Course
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  className="courseListIcon courseContent"
+                  onClick={() => handleCourseContent(params.row.id)}
+                  size="small"
+                >
+                  Content
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button 
+                  variant="contained" 
+                  color="success" 
+                  className="courseListIcon certificates"
+                  onClick={() => handleCertificates(params.row.id)}
+                  size="small"
+                >
+                  Resources
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button 
+                  variant="contained" 
+                  color="warning"  
+                  className="courseListIcon coupons"
+                  onClick={() => handleCoupons(params.row.id)}
+                  size="small"
+                >
+                  Coupons
+                </Button>
+              </Grid>
+            </Grid>
             )
         },
     ];
 
     return (
         <div className="courseList">
-            <Paper elevation={3} className="courseListPaper">
-                <div className="courseListTop">
-                    <Typography variant="h6" className="courseListTitle">Course List</Typography>
-                    <Link to="/addCourse">
-                        <Button variant="contained" color="primary" className="courseListCreateBtn">Create</Button>
-                    </Link>
-                </div>
-                <div className="courseListContent">
-                    <DataGrid
-                        rows={courses}
-                        columns={columns}
-                        initialState={{
-                            pagination: {
-                                paginationModel: { page: 0, pageSize: 5 },
-                            },
-                        }}
-                        pageSizeOptions={[5, 10]}
-                        checkboxSelection
-                        autoHeight
-                    />
-                </div>
-            </Paper>
-        </div>
+    <Paper elevation={3} className="courseListPaper">
+      <div className="courseListTop">
+        <Typography variant="h6" className="courseListTitle">Course List</Typography>
+        <Link to="/addCourse">
+          <Button variant="contained" color="primary" className="courseListCreateBtn" size="small">Create</Button>
+        </Link>
+      </div>
+      <div className="courseListContent">
+        <DataGrid
+          rows={courses}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          autoHeight
+        />
+      </div>
+    </Paper>
+  </div>
     );
 }
