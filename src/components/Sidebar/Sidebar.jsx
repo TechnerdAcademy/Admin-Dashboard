@@ -63,6 +63,12 @@ export default function Sidebar() {
                                 <span className="listItemText">Students</span>
                             </li>
                         </Link>
+                        <Link className="sidebarListLink" to="/enrolled">
+                            <li className="sidebarListItem">
+                                <PersonOutline className="listItemIcon" />
+                                <span className="listItemText">Enrolled-Students</span>
+                            </li>
+                        </Link>
                         <Link className="sidebarListLink" to="/teachers">
                             <li className="sidebarListItem">
                                 <PersonOutline className="listItemIcon" />
@@ -91,6 +97,12 @@ export default function Sidebar() {
                             <li className="sidebarListItem">
                                 <Storefront className="listItemIcon" />
                                 <span className="listItemText">Announcements</span>
+                            </li>
+                        </Link>
+                        <Link className="sidebarListLink" to="/couponsList">
+                            <li className="sidebarListItem">
+                                <Storefront className="listItemIcon" />
+                                <span className="listItemText">CouponsList</span>
                             </li>
                         </Link>
                         <Link className="sidebarListLink" to="/transactions">

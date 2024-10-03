@@ -22,6 +22,10 @@ import CourseContent from './pages/ProductList/coursecontent'
 import BusinessPackage from './pages/BusinessPackage/index'
 import Announcements from './pages/Announcements/add'
 import Certificates from './pages/ProductList/certificates'
+import Coupons from './pages/ProductList/coupons'
+import CouponsList from './pages/ProductList/couponsList'
+import EnrolledStudents from './pages/UserList/EnrolledStudents'
+
 // import Settings from './pages/Login/index'
 
 
@@ -47,6 +51,14 @@ function App() {
         {
           path: '/users',
           element: <UserList />,
+        },
+        {
+          path: '/enrolled',
+          element: <EnrolledStudents />,
+        },
+        {
+          path: '/couponsList',
+          element: <CouponsList />,
         },
         {
           path: '/teachers',
@@ -104,6 +116,11 @@ function App() {
           path: '/course/certificates/:id?',
           element: <Certificates />,
         },
+        {
+          path: '/course/coupons/:id?',
+          element: <Coupons />,
+        },
+        //
         {
           path: '/business',
           element: <BusinessPackage  />,
