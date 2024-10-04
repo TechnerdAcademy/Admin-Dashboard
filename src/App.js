@@ -25,6 +25,7 @@ import Certificates from './pages/ProductList/certificates'
 import Coupons from './pages/ProductList/coupons'
 import CouponsList from './pages/ProductList/couponsList'
 import EnrolledStudents from './pages/UserList/EnrolledStudents'
+import Refrels from './pages/refrels/index'
 
 // import Settings from './pages/Login/index'
 
@@ -59,6 +60,10 @@ function App() {
         {
           path: '/couponsList',
           element: <CouponsList />,
+        },
+        {
+          path: '/refrels',
+          element: <Refrels />,
         },
         {
           path: '/teachers',

@@ -105,6 +105,12 @@ export default function Sidebar() {
                                 <span className="listItemText">CouponsList</span>
                             </li>
                         </Link>
+                        <Link className="sidebarListLink" to="/refrels">
+                            <li className="sidebarListItem">
+                                <Storefront className="listItemIcon" />
+                                <span className="listItemText">Refrels Details</span>
+                            </li>
+                        </Link>
                         <Link className="sidebarListLink" to="/transactions">
                             <li className="sidebarListItem">
                                 <AttachMoneyOutlined className="listItemIcon" />
