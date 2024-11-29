@@ -122,7 +122,7 @@ export default function Auth() {
         <Box sx={{ marginBottom: 2 }}>
           <img
             src={`${process.env.PUBLIC_URL}/tecknerdslogo.png`}
-            alt="Technerds Logo"
+            alt="MADAN Logo"
             style={{
               width: 200, // adjust the width to your desired size
               height: 120, // adjust the height to your desired size
@@ -136,7 +136,7 @@ export default function Auth() {
           // Login Form
           <>
             <Typography variant="h5" sx={{ marginBottom: 2, color: '#4A148C' }}>
-              Welcome to Technerds Academy
+              Welcome to MADAN Academy
             </Typography>
             <Typography variant="body2" sx={{ marginBottom: 3, color: '#555' }}>
               Enter your credentials to continue

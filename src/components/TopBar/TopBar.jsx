@@ -56,7 +56,7 @@ export default function TopBar() {
     <div className="topbar">
       <div className="topbarWrapper">
         <div className="topbarLeft">
-          <h2 className="logo">Technerds Dashboard</h2>
+          <h2 className="logo">MADAN Dashboard</h2>
         </div>
         <div className="topbarRight">
           {/* <div className="topbarRightIconWrapper">
@@ -197,7 +197,6 @@ export default function TopBar() {
     </Button>
   </Box>
 </TabPanel> */}
-
         </Box>
       </Modal>
     </div>
